@@ -1,12 +1,11 @@
-import express from 'express';
-import session from 'express-session';
-import cookieParser from 'cookie-parser';
+const express = require('express');
+const session = require('express-session');
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static('./pages/public'));
+app.use(express.static(path.join(process.cwb(),'./pages/public')));
 
 const porta = 3000;
 const host = '0.0.0.0';
