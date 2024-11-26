@@ -246,9 +246,14 @@ function menuView(req, resp) {
 
 
 app.use(session({
-    secret: 'chave-secreta',
-    resave: false,
-    saveUninitialized: true,
+    secret: 'Minha chave secreta', // Uma chave secreta para assinar o cookie da sessão
+    resave: false,                  // Não ressave a sessão se não houver mudanças
+    saveUninitialized: false,       // Não salva sessões não inicializadas
+    cookie: { 
+               secure: false,    // Em produção, configure como true se usar HTTPS
+               httpOnly: true,
+               maxAge: 1000 * 60 * 30
+    }
 }));
 
 
