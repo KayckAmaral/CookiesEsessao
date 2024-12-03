@@ -205,9 +205,9 @@ function cadastrarProduto(req, resp) {
 
 
 function menuView(req, resp) {
-    const ultimoAcesso = req.cookies['ultimoAcesso'];
-    if(!ultimoAcesso){
-        ultimoAcesso='';
+    let ultimoAcesso = req.cookies['ultimoAcesso']; 
+    if (!ultimoAcesso) {
+        ultimoAcesso = ''; 
     }
     resp.send(`
         <html>
@@ -325,20 +325,24 @@ app.post('/login', (req, resp) => {
     }
 });
 
-// Middleware para verificar login
 function verificarAutenticacao(req, resp, next) {
     if (req.session.usuario) {
-        next();
-    } else {
-        resp.redirect('/login.html');
+        return next();
     }
+    resp.redirect('/login.html');
 }
 
 function logout(req, resp) {
-    // Limpa os cookies e redireciona para a página de login
-    resp.clearCookie('ultimoAcesso');
-    resp.redirect('/login.html');
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Erro ao encerrar sessão:', err);
+            return resp.status(500).send('Erro ao encerrar a sessão.');
+        }
+        resp.clearCookie('ultimoAcesso');
+        resp.redirect('/login.html');
+    });
 }
+
 
 // Proteger rotas com middleware
 app.use(verificarAutenticacao);
